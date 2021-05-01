@@ -35,7 +35,7 @@ public class HomeFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         recyclerView = root.findViewById(R.id.main_recyclerview);
-        dbHelper = new DatabaseHelper(getActivity());
+        dbHelper = new DatabaseHelper(root.getContext());
         id = new ArrayList<>();
         package_name = new ArrayList<>();
         appName = new ArrayList<>();
@@ -50,7 +50,7 @@ public class HomeFragment extends Fragment {
 
         notificationsAdapter = new NotificationsAdapter(root.getContext(), id, package_name, appName, user, textOfNotification, post_time, chanel_id, group_id);
         recyclerView.setAdapter(notificationsAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
 
         return root;
     }

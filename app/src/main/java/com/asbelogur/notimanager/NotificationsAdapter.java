@@ -60,7 +60,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, Chat.class);
+                Intent intent = new Intent(context, ChatActivity.class);
                 intent.putExtra("name", String.valueOf(user.get(position)));
 
                 context.startActivity(intent);

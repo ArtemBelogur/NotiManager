@@ -48,6 +48,7 @@
                 android:id="@+id/notification_logo"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
+                android:layout_marginTop="4dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/notification_title"
                 app:srcCompat="@drawable/other_notification_logo" />

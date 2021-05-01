@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
+import java.util.List;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String LOGTAG = "DatabaseHelper";
@@ -99,5 +101,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return cursor;
     }
-    
+
+    public Cursor getUniqueAppsNames() {
+        String query = "SELECT * FROM " + TABLE_MESSAGES + " GROUP BY " + APP_NAME;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+
+        if (db != null)
+            cursor = db.rawQuery(query, null);
+
+        return cursor;
+    }
 }
