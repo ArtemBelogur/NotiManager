@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        /*
         recyclerView = findViewById(R.id.main_recyclerview);
         dbHelper = new DatabaseHelper(MainActivity.this);
         id = new ArrayList<>();
@@ -77,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
         notificationsAdapter = new NotificationsAdapter(MainActivity.this, id, package_name, appName, user, textOfNotification, post_time, chanel_id, group_id);
         recyclerView.setAdapter(notificationsAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+
+         */
 
         // If the user did not turn the notification listener service on we prompt him to do so
         if(!isNotificationServiceEnabled()){
@@ -101,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    void storeDataInArrays() {
+    public void storeDataInArrays() {
         Cursor cursor = dbHelper.readNotifications();
         if (cursor.getCount() > 0)
             while (cursor.moveToNext()) {

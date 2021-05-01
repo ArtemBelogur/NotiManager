@@ -1,5 +1,6 @@
 package com.asbelogur.notimanager.useful;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -9,6 +10,8 @@ import android.service.notification.StatusBarNotification;
 
 import com.asbelogur.notimanager.BuildConfig;
 import com.asbelogur.notimanager.DatabaseHelper;
+
+import java.util.List;
 
 public class CNLSHelper {
     public static String getAppNameFromPackage(Context context, String packageName, boolean returnNull) {
@@ -70,5 +73,19 @@ public class CNLSHelper {
                 if (sbn.getId() == cursor.getInt(8))
                     return false;
         return true;
+    }
+
+    public static boolean isAppRunning(final Context context, final String packageName) {
+        final ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        final List<ActivityManager.RunningAppProcessInfo> procInfos = activityManager.getRunningAppProcesses();
+        if (procInfos != null)
+        {
+            for (final ActivityManager.RunningAppProcessInfo processInfo : procInfos) {
+                if (processInfo.processName.equals(packageName)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

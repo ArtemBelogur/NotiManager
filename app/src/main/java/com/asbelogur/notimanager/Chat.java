@@ -2,6 +2,7 @@ package com.asbelogur.notimanager;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.database.Cursor;
@@ -11,7 +12,7 @@ import android.os.Bundle;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class ChatActivity extends AppCompatActivity {
+public class Chat extends AppCompatActivity {
 
     RecyclerView recyclerView;
     DatabaseHelper dbHelper;
@@ -22,7 +23,7 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ch);
+        setContentView(R.layout.activity_chat);
 
         String name = getIntent().getStringExtra("name");
 
@@ -30,9 +31,9 @@ public class ChatActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        /*recyclerView = findViewById(R.id.chat_recyclerview);
+        recyclerView = findViewById(R.id.chat_recyclerview);
 
-        dbHelper = new DatabaseHelper(ChatActivity.this);
+        dbHelper = new DatabaseHelper(Chat.this);
         id = new ArrayList<>();
         package_name = new ArrayList<>();
         textOfNotification = new ArrayList<>();
@@ -41,11 +42,9 @@ public class ChatActivity extends AppCompatActivity {
 
         storeDataInArrays(name);
 
-        chatAdapter = new ChatAdapter(ChatActivity.this, id, package_name, user, textOfNotification, post_time);
+        chatAdapter = new ChatAdapter(Chat.this, id, package_name, user, textOfNotification, post_time);
         recyclerView.setAdapter(chatAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
-
-         */
+        recyclerView.setLayoutManager(new LinearLayoutManager(Chat.this));
     }
 
     @Override

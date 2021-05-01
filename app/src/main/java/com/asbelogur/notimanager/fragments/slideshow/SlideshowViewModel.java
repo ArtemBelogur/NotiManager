@@ -1,4 +1,4 @@
-package com.asbelogur.notimanager.ui.slideshow;
+package com.asbelogur.notimanager.fragments.slideshow;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

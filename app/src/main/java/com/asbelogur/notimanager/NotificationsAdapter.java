@@ -60,9 +60,8 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, ChatActivity.class);
+                Intent intent = new Intent(context, Chat.class);
                 intent.putExtra("name", String.valueOf(user.get(position)));
-
 
                 context.startActivity(intent);
             }
@@ -84,10 +83,10 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            content_txt = (TextView) itemView.findViewById(R.id.notification_text);
-            user_txt = (TextView) itemView.findViewById(R.id.notification_title);
-            time_txt = (TextView) itemView.findViewById(R.id.post_time);
-            logo_txt = (ImageView) itemView.findViewById(R.id.notification_logo);
+            content_txt = itemView.findViewById(R.id.notification_text);
+            user_txt = itemView.findViewById(R.id.notification_title);
+            time_txt = itemView.findViewById(R.id.post_time);
+            logo_txt = itemView.findViewById(R.id.notification_logo);
         }
     }
 }

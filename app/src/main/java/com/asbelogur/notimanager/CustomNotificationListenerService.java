@@ -1,6 +1,5 @@
 package com.asbelogur.notimanager;
 
-import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.content.Intent;
 import android.os.Build;
@@ -12,9 +11,9 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
+import com.asbelogur.notimanager.useful.App;
 import com.asbelogur.notimanager.useful.CNLSHelper;
 
-import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 
@@ -55,18 +54,23 @@ public class CustomNotificationListenerService extends NotificationListenerServi
 
 
                 String time = Long.toString(sbn.getPostTime());
-                String chanelId = null;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    chanelId = notification.getChannelId();
-                }
+                String chanelId;
+                chanelId = notification.getChannelId();
 
                 assert chanelId != null;
                 if (name != null && user != null && !chanelId.equals("VIRTUAL_KEYBOARD"))
+                {
                     dbHelper.addMessage(sbn.getPackageName(), name, user, text, time, chanelId, sbn.getGroupKey(), sbn.getId());
 
-                String stringBuilder = "Catched notification: " + notification.toString();
-                Log.i(LOGTAG, (String) stringBuilder);
+                    String stringBuilder = "Catched notification: " + notification.toString();
+                    Log.i(LOGTAG, stringBuilder);
 
+                    if (!CNLSHelper.isAppRunning(App.getAppContext(), "com.asbelogur.notimanager")){
+                        Intent intent = new Intent(this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
+                }
                 break;
             }
         }
