@@ -1,4 +1,4 @@
-package com.asbelogur.notimanager;
+package com.asbelogur.notimanager.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -13,6 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.asbelogur.notimanager.activities.ChatActivity;
+import com.asbelogur.notimanager.R;
 import com.asbelogur.notimanager.useful.CNLSHelper;
 
 import java.text.SimpleDateFormat;

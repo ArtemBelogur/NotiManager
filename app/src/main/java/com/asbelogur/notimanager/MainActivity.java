@@ -4,16 +4,16 @@ import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.Menu;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.asbelogur.notimanager.adapters.NotificationsAdapter;
+import com.asbelogur.notimanager.useful.DatabaseHelper;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.navigation.NavController;
@@ -23,24 +23,19 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import com.asbelogur.notimanager.fragments.all.AllNotifications;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
 
+    public DatabaseHelper dbHelper;
+    public NotificationsAdapter notificationsAdapter;
+
     private static final String LOGTAG = "MainActivity";
     private static final String ENABLED_NOTIFICATION_LISTENERS = "enabled_notification_listeners";
     private static final String ACTION_NOTIFICATION_LISTENER_SETTINGS = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
-
-    RecyclerView recyclerView;
-
-    DatabaseHelper dbHelper;
-    ArrayList<String> id, package_name, appName, textOfNotification, user, post_time, chanel_id, group_id, notification_id;
-    NotificationsAdapter notificationsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,26 +55,11 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        /*
-        recyclerView = findViewById(R.id.main_recyclerview);
         dbHelper = new DatabaseHelper(MainActivity.this);
-        id = new ArrayList<>();
-        package_name = new ArrayList<>();
-        appName = new ArrayList<>();
-        textOfNotification = new ArrayList<>();
-        user = new ArrayList<>();
-        post_time = new ArrayList<>();
-        chanel_id = new ArrayList<>();
-        group_id = new ArrayList<>();
-        //notification_id = new ArrayList<>();
-
-        storeDataInArrays();
-
-        notificationsAdapter = new NotificationsAdapter(MainActivity.this, id, package_name, appName, user, textOfNotification, post_time, chanel_id, group_id);
-        recyclerView.setAdapter(notificationsAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-
-         */
+        notificationsAdapter = new NotificationsAdapter(MainActivity.this,
+                AllNotifications.id, AllNotifications.package_name, AllNotifications.appName,
+                AllNotifications.user, AllNotifications.textOfNotification,
+                AllNotifications.post_time, AllNotifications.chanel_id, AllNotifications.group_id);
 
         // If the user did not turn the notification listener service on we prompt him to do so
         if(!isNotificationServiceEnabled()){
@@ -92,9 +72,47 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.delete_all){
+            confirmDialog();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    void confirmDialog(){
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("Delete All?");
+        builder.setMessage("Are you sure you want to delete all Data?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dbHelper.deleteAllData();
+                //Refresh Activity
+                AllNotifications.id.clear();
+                AllNotifications.package_name.clear();
+                AllNotifications.appName.clear();
+                AllNotifications.textOfNotification.clear();
+                AllNotifications.user.clear();
+                AllNotifications.post_time.clear();
+                AllNotifications.chanel_id.clear();
+                AllNotifications.group_id.clear();
+
+                notificationsAdapter.notifyDataSetChanged();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        builder.create().show();
     }
 
     @Override
@@ -102,21 +120,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
-    }
-
-    public void storeDataInArrays() {
-        Cursor cursor = dbHelper.readNotifications();
-        if (cursor.getCount() > 0)
-            while (cursor.moveToNext()) {
-                id.add(0, cursor.getString(0));
-                package_name.add(0, cursor.getString(1));
-                appName.add(0, cursor.getString(2));
-                user.add(0, cursor.getString(3));
-                textOfNotification.add(0, cursor.getString(4));
-                post_time.add(0, cursor.getString(5));
-                chanel_id.add(0, cursor.getString(6));
-                group_id.add(0, cursor.getString(7));
-            }
     }
 
     private boolean isNotificationServiceEnabled(){

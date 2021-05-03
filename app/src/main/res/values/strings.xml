@@ -10,7 +10,7 @@
     <string name="nav_header_title">NotiManager</string>
     <string name="nav_header_subtitle">artem.belogur@mail.ru</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Delete All Notifications</string>
 
     <string name="menu_home">All Notifications</string>
     <string name="menu_gallery">Today\'s Notifications</string>

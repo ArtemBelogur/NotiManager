@@ -1,4 +1,4 @@
-package com.asbelogur.notimanager.fragments.gallery;
+package com.asbelogur.notimanager.fragments.today;
 
 import android.annotation.SuppressLint;
 import android.database.Cursor;
@@ -6,26 +6,23 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.asbelogur.notimanager.DatabaseHelper;
-import com.asbelogur.notimanager.NotificationsAdapter;
+import com.asbelogur.notimanager.useful.DatabaseHelper;
+import com.asbelogur.notimanager.adapters.NotificationsAdapter;
 import com.asbelogur.notimanager.R;
-import com.asbelogur.notimanager.fragments.home.HomeViewModel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class GalleryFragment extends Fragment {
+public class TodayNotifications extends Fragment {
 
     RecyclerView recyclerView;
 
@@ -33,12 +30,12 @@ public class GalleryFragment extends Fragment {
     ArrayList<String> id, package_name, appName, textOfNotification, user, post_time, chanel_id, group_id, notification_id;
     NotificationsAdapter notificationsAdapter;
 
-    private GalleryViewModel galleryViewModel;
+    private TodayNotificationsViewModel todayNotificationsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        galleryViewModel =
-                ViewModelProviders.of(this).get(GalleryViewModel.class);
+        todayNotificationsViewModel =
+                ViewModelProviders.of(this).get(TodayNotificationsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_gallery, container, false);
 
         recyclerView = root.findViewById(R.id.today_recyclerview);
@@ -57,10 +54,37 @@ public class GalleryFragment extends Fragment {
 
         notificationsAdapter = new NotificationsAdapter(root.getContext(), id, package_name, appName, user, textOfNotification, post_time, chanel_id, group_id);
         recyclerView.setAdapter(notificationsAdapter);
+
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
 
         return root;
     }
+
+    ItemTouchHelper.SimpleCallback itemTouchHelperCallback =
+            new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
+                @Override
+                public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                    return false;
+                }
+
+                @Override
+                public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                    dbHelper.deleteOneRow(id.get(viewHolder.getAdapterPosition()));
+
+                    id.remove(viewHolder.getAdapterPosition());
+                    package_name.remove(viewHolder.getAdapterPosition());
+                    appName.remove(viewHolder.getAdapterPosition());
+                    textOfNotification.remove(viewHolder.getAdapterPosition());
+                    user.remove(viewHolder.getAdapterPosition());
+                    post_time.remove(viewHolder.getAdapterPosition());
+                    chanel_id.remove(viewHolder.getAdapterPosition());
+                    group_id.remove(viewHolder.getAdapterPosition());
+
+                    notificationsAdapter.notifyDataSetChanged();
+                }
+            };
 
     public void storeDataInArrays() {
         Cursor cursor = dbHelper.readNotifications();

@@ -1,12 +1,14 @@
-package com.asbelogur.notimanager;
+package com.asbelogur.notimanager.useful;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -88,6 +90,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.insert(TABLE_MESSAGES, null, cv);
 
+        Intent intent = new Intent();
+
         Log.i(LOGTAG, "A notification was added to the database");
     }
 
@@ -112,5 +116,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor = db.rawQuery(query, null);
 
         return cursor;
+    }
+
+    public void deleteOneRow(String row_id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result = db.delete(TABLE_MESSAGES, "_id=?", new String[]{row_id});
+    }
+
+    public void deleteAllData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_MESSAGES);
     }
 }

@@ -11,10 +11,9 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
-import com.asbelogur.notimanager.useful.App;
+import com.asbelogur.notimanager.fragments.all.AllNotifications;
 import com.asbelogur.notimanager.useful.CNLSHelper;
-
-import java.util.Objects;
+import com.asbelogur.notimanager.useful.DatabaseHelper;
 
 
 public class CustomNotificationListenerService extends NotificationListenerService {
@@ -50,26 +49,34 @@ public class CustomNotificationListenerService extends NotificationListenerServi
 
                 String name = CNLSHelper.getAppNameFromPackage(this, sbn.getPackageName(), false);
                 String user = extras.getString("android.title");
-                String text = Objects.requireNonNull(extras.getCharSequence("android.text")).toString();
+
+                String text = null;
+                if (extras.getCharSequence("android.text") != null)
+                    text = (String) extras.getCharSequence("android.text");
 
 
                 String time = Long.toString(sbn.getPostTime());
-                String chanelId;
-                chanelId = notification.getChannelId();
+                String chanelId = notification.getChannelId();
 
                 assert chanelId != null;
-                if (name != null && user != null && !chanelId.equals("VIRTUAL_KEYBOARD"))
+                if (name != null && user != null && !chanelId.equals("VIRTUAL_KEYBOARD") && !CNLSHelper.isNotificationExist(time, text, user, name, dbHelper))
                 {
                     dbHelper.addMessage(sbn.getPackageName(), name, user, text, time, chanelId, sbn.getGroupKey(), sbn.getId());
 
-                    String stringBuilder = "Catched notification: " + notification.toString();
+                    String stringBuilder = "Cached notification: " + notification.toString();
                     Log.i(LOGTAG, stringBuilder);
 
-                    if (!CNLSHelper.isAppRunning(App.getAppContext(), "com.asbelogur.notimanager")){
+                    Intent intent = new Intent(this, AllNotifications.class);
+                    intent.putExtra("refresh", "yes");
+
+                    /*
+                    if (CNLSHelper.isAppRunning(App.getAppContext(), "com.asbelogur.notimanager")){
                         Intent intent = new Intent(this, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                     }
+
+                     */
                 }
                 break;
             }

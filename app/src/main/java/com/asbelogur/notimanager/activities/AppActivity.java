@@ -1,4 +1,4 @@
-package com.asbelogur.notimanager;
+package com.asbelogur.notimanager.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -6,6 +6,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.database.Cursor;
 import android.os.Bundle;
+
+import com.asbelogur.notimanager.useful.DatabaseHelper;
+import com.asbelogur.notimanager.R;
+import com.asbelogur.notimanager.adapters.NotificationsAdapter;
 
 import java.util.ArrayList;
 

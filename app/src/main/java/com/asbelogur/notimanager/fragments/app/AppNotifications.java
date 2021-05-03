@@ -1,30 +1,25 @@
-package com.asbelogur.notimanager.fragments.slideshow;
+package com.asbelogur.notimanager.fragments.app;
 
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.asbelogur.notimanager.AppsAdapter;
-import com.asbelogur.notimanager.DatabaseHelper;
-import com.asbelogur.notimanager.NotificationsAdapter;
+import com.asbelogur.notimanager.adapters.AppsAdapter;
+import com.asbelogur.notimanager.useful.DatabaseHelper;
 import com.asbelogur.notimanager.R;
-import com.asbelogur.notimanager.fragments.home.HomeViewModel;
+import com.asbelogur.notimanager.fragments.all.AllNotificationsViewModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class SlideshowFragment extends Fragment {
+public class AppNotifications extends Fragment {
 
     RecyclerView recyclerView;
 
@@ -32,12 +27,12 @@ public class SlideshowFragment extends Fragment {
     ArrayList<String> id, package_name, appName, textOfNotification, user, post_time, chanel_id, group_id, notification_id;
     AppsAdapter appsAdapter;
 
-    private HomeViewModel homeViewModel;
+    private AllNotificationsViewModel allNotificationsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
+        allNotificationsViewModel =
+                ViewModelProviders.of(this).get(AllNotificationsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_slideshow, container, false);
 
         recyclerView = root.findViewById(R.id.apps_recyclerview);

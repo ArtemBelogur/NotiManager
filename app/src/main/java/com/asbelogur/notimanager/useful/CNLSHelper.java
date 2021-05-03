@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.service.notification.StatusBarNotification;
 
 import com.asbelogur.notimanager.BuildConfig;
-import com.asbelogur.notimanager.DatabaseHelper;
 
 import java.util.List;
 
@@ -66,13 +65,15 @@ public class CNLSHelper {
     }
     */
 
-    public static boolean isNotificationExist (StatusBarNotification sbn, DatabaseHelper dbHelper) {
+    public static boolean isNotificationExist (String time, String text, String user, String name, DatabaseHelper dbHelper) {
         Cursor cursor = dbHelper.readNotifications();
         if (cursor.getCount() > 0)
             while (cursor.moveToNext())
-                if (sbn.getId() == cursor.getInt(8))
-                    return false;
-        return true;
+                if (Math.abs(Long.parseLong(time) - Long.parseLong(cursor.getString(5))) < 1000 &&
+                        text.equals(cursor.getString(4)) && user.equals(cursor.getString(3)) &&
+                        name.equals(cursor.getString(2)))
+                    return true;
+        return false;
     }
 
     public static boolean isAppRunning(final Context context, final String packageName) {

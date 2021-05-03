@@ -3,13 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.asbelogur.notimanager">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
     <application tools:ignore="ExtraText"
-        android:icon="@mipmap/ic_launcher_foreground">
+        android:icon="@mipmap/ic_launcher_foreground"
+        android:label="NotiManager">
         <activity
-            android:name=".AppActivity"
+            android:name=".activities.AppActivity"
             android:theme="@style/AppTheme.ActionBar"/>
         <activity
-            android:name=".ChatActivity"
+            android:name=".activities.ChatActivity"
             android:theme="@style/AppTheme.ActionBar" />
         <activity
             android:name=".MainActivity"
